@@ -72,9 +72,10 @@ public class UserService {
         if (currentUser == null) {
             throw new IllegalStateException("No user is logged in.");
         }
+
         String avatarFilename = fileStorageService.storeFile(avatar);
-        currentUser.setAvatarFilename(avatarFilename);
-        currentUser.setModificationDate(LocalDateTime.now()); // Actualiza la fecha de modificación
+        currentUser.setAvatarUrl(avatarFilename);
+        currentUser.setModificationDate(LocalDateTime.now());
         userRepository.save(currentUser);
     }
 
@@ -93,7 +94,7 @@ public class UserService {
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
         userDto.setEmail(user.getEmail());
-        userDto.setAvatarFilename(user.getAvatarFilename());
+        userDto.setAvatarUrl(user.getAvatarUrl());
         userDto.setRole(user.getRole());
         userDto.setRegistrationDate(user.getRegistrationDate());
         userDto.setModificationDate(user.getModificationDate());

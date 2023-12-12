@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.controllers.UserController.MessageResponse;
 import com.example.demo.dto.NoteDto;
 import com.example.demo.models.UserModel;
 import com.example.demo.services.NoteService;
@@ -8,7 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,11 +31,6 @@ public class NoteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<NoteDto>> getAllNotes() {
-        return ResponseEntity.ok(noteService.getAllNotes());
-    }
-
-    @GetMapping("/current")
     public ResponseEntity<List<NoteDto>> getNotesByCurrentUser() {
         UserModel currentUser = userService.getCurrentUser();
         
@@ -68,5 +69,27 @@ public class NoteController {
     public ResponseEntity<Void> deleteNoteById(@PathVariable Long id) {
         noteService.deleteNoteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{noteId}/attachments")
+    public ResponseEntity<?> addAttachmentToNote(
+        @PathVariable Long noteId, 
+        @RequestParam("file") MultipartFile file) {
+        try {
+            noteService.addAttachmentToNote(noteId, file);
+            return ResponseEntity.ok(new com.example.demo.exceptions.MessageResponse("Attachment added successfully"));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new com.example.demo.exceptions.MessageResponse("Error adding attachment: " + e.getMessage()));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new com.example.demo.exceptions.MessageResponse(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/kanban")
+    public ResponseEntity<List<NoteDto>> getNotesForKanban() {
+        List<NoteDto> notes = noteService.getNotesForKanban();
+        return ResponseEntity.ok(notes);
     }
 }

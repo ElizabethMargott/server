@@ -8,6 +8,7 @@ public class TaskDto {
     private Long id;
     private String content;
     private Boolean isCompleted;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private Long taskListId;
+    private LocalDateTime creationDate;
+    private LocalDateTime modificationDate;
 }

@@ -2,13 +2,15 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties
 public class DemoApplication {
 
-	public String DB_USERNAME = System.getenv("DB_USERNAME");
+	public String PORT = System.getenv("PORT");
 
-	public String DB_PASSWORD = System.getenv("DB_PASSWORD");
+	public String DB_URL = System.getenv("DB_URL");
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);

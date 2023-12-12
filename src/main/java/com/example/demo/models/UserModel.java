@@ -30,9 +30,9 @@ public class UserModel implements UserDetails {
     @Column(nullable = false, length = 255)
     private String username, email, password;
 
-    @Column(name = "avatar_filename")
+    @Column(name = "avatar_url")
     @Builder.Default
-    private String avatarFilename = "default.png";
+    private String avatarUrl = "default.png";
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
@@ -46,11 +46,11 @@ public class UserModel implements UserDetails {
     @Column(name = "modification_date", nullable = false)
     private LocalDateTime modificationDate;
 
-    // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<NoteModel> notes;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<NoteModel> notes; 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<NoteModel> notes;    
+    private List<TaskListModel> taskList;    
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

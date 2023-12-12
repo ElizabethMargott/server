@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,4 +35,10 @@ public class NoteModel {
     @JoinColumn(name = "user_id", nullable = false)
     private UserModel user;
     
+    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
+    private List<AttachmentModel> attachments;
+
+    @ManyToOne
+    @JoinColumn(name = "kanbanColumn_id", referencedColumnName = "id")
+    private KanbanColumn kanbanColumn;
 }

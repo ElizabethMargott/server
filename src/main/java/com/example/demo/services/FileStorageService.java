@@ -1,11 +1,15 @@
 package com.example.demo.services;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import com.example.demo.exceptions.FileStorageException;
-import java.io.IOException;
+
+import com.example.demo.config.FileStorageProperties;
+
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,12 +20,15 @@ public class FileStorageService {
 
     private final Path fileStorageLocation;
 
-    public FileStorageService(@Value("${file.storage.location}") String storageLocation) {
-        this.fileStorageLocation = Paths.get(storageLocation).toAbsolutePath().normalize();
+    @Autowired
+    public FileStorageService(FileStorageProperties fileStorageProperties) {
+        this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+                .toAbsolutePath().normalize();
+
         try {
             Files.createDirectories(this.fileStorageLocation);
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
+        } catch (Exception ex) {
+            throw new RuntimeException("No se pudo crear el directorio donde se almacenarán los archivos subidos.", ex);
         }
     }
 
@@ -29,16 +36,30 @@ public class FileStorageService {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         try {
-            if (fileName.contains("..")) {
-                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+            if(fileName.contains("..")) {
+                throw new RuntimeException("Lo siento! El nombre del archivo contiene una secuencia de ruta no válida " + fileName);
             }
 
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;
-        } catch (IOException ex) {
-            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        } catch (Exception ex) {
+            throw new RuntimeException("No se pudo almacenar el archivo " + fileName + ". ¡Inténtalo de nuevo!", ex);
+        }
+    }
+
+    public Resource loadFileAsResource(String fileName) {
+        try {
+            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if(resource.exists()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Archivo no encontrado " + fileName);
+            }
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("Archivo no encontrado " + fileName, ex);
         }
     }
 }

@@ -44,16 +44,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
-    @GetMapping("/current/avatar")
-    public RedirectView getCurrentUserAvatarRedirect() {
-        UserResponseDto currentUserDto = userService.getCurrentUserDto();
-        if (currentUserDto != null) {
-            String avatarFilename = currentUserDto.getAvatarFilename();
-            return new RedirectView("/uploads/avatars/" + avatarFilename);
-        }
-        return new RedirectView("/uploads/avatars/default.png");
-    }
-
     @PostMapping("/current/avatar")
     public ResponseEntity<?> updateUserAvatar(@RequestParam("avatar") MultipartFile avatar) {
         try {

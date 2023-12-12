@@ -17,16 +17,17 @@ public class AttachmentModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "note_id", nullable = false)
     private NoteModel note;
 
     @Column(nullable = false)
-    private String file_type;
+    private String fileType;
 
     @Column(nullable = false)
-    private String file_path;
+    private String filePath;
 
     @CreationTimestamp
-    private LocalDateTime created_at;
+    @Column(name = "creation_date", nullable = false)
+    private LocalDateTime creationDate;
 }

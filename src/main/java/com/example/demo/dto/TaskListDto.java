@@ -7,6 +7,7 @@ import lombok.Data;
 public class TaskListDto {
     private Long id;
     private String title;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime creationDate;
+    private LocalDateTime modificationDate;
+    private Long userId;
 }

@@ -12,7 +12,7 @@ public class UserResponseDto {
     private Long id;
     private String username;
     private String email;
-    private String avatarFilename;
+    private String avatarUrl;
     private Role role;
     private LocalDateTime registrationDate;
     private LocalDateTime modificationDate;

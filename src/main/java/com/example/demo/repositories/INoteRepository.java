@@ -12,4 +12,6 @@ public interface INoteRepository extends JpaRepository<NoteModel, Long> {
 
     List<NoteModel> findByUser(UserModel user);
 
+    List<NoteModel> findByKanbanColumnId(Long kanbanColumnId);;
+
 }

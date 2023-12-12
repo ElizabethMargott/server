@@ -28,11 +28,17 @@ public class TaskListModel {
     private String title;
 
     @CreationTimestamp
-    private LocalDateTime created_at;
+    @Column(name = "creation_date", nullable = false)
+    private LocalDateTime creationDate;
 
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    @Column(name = "modification_date", nullable = false)
+    private LocalDateTime modificationDate;
 
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL)
     private List<TaskModel> tasks;
+
+    // @ManyToOne
+    // @JoinColumn(name = "kanban_column_id")
+    // private KanbanColumn kanbanColumn;
 }

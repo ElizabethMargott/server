@@ -21,14 +21,13 @@ public class TaskListController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<TaskListDto>> getAllTaskListsForCurrentUser() {
+    public ResponseEntity<List<TaskListDto>> getTasklistByCurrentUser() {
         UserModel currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        List<TaskListDto> taskLists = taskListService.getAllTaskListsForUser(currentUser);
-        return ResponseEntity.ok(taskLists);
+        List<TaskListDto> taskListDtos = taskListService.getAllTaskListsByUser(currentUser);
+        return ResponseEntity.ok(taskListDtos);
     }
 
     @PostMapping
@@ -37,10 +36,25 @@ public class TaskListController {
         if (currentUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
-        TaskListDto savedTaskList = taskListService.createOrUpdateTaskList(taskListDto, currentUser);
-        return ResponseEntity.ok(savedTaskList);
+        TaskListDto savedTaskListDto = taskListService.createOrUpdateTaskList(taskListDto, currentUser);
+        return ResponseEntity.ok(savedTaskListDto);
     }
 
-    // Similar endpoints for GET by ID, PUT, DELETE...
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskListDto> updateTaskList(
+            @PathVariable Long id, @RequestBody TaskListDto taskListDto) {
+        UserModel currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        taskListDto.setId(id);
+        TaskListDto updatedTaskListDto = taskListService.createOrUpdateTaskList(taskListDto, currentUser);
+        return ResponseEntity.ok(updatedTaskListDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTaskList(@PathVariable Long id) {
+        taskListService.deleteTaskList(id);
+        return ResponseEntity.ok().build();
+    }
 }

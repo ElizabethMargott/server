@@ -98,7 +98,9 @@ public class NoteService {
         dto.setDescription(note.getDescription());
         dto.setContent(note.getContent());
         dto.setUserId(note.getUser().getId());
-        dto.setKanbanColumn(note.getKanbanColumn().getId());
+        if (note.getKanbanColumn() != null) {
+            dto.setKanbanColumn(note.getKanbanColumn().getId());
+        }
         dto.setCreationDate(note.getCreationDate());
         dto.setModificationDate(note.getModificationDate());
         return dto;

@@ -57,7 +57,7 @@ CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     
     // 1. Especifica el origen permitido (tu aplicación React)
-    configuration.setAllowedOrigins(Arrays.asList("*")); 
+    configuration.setAllowedOrigins(Arrays.asList("https://nexus-notes.up.railway.app", "http://localhost:5173")); 
 
     // 2. Especifica los métodos HTTP permitidos
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));

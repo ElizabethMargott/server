@@ -25,6 +25,12 @@ public class TaskListService {
                 .collect(Collectors.toList());
     }
 
+    public TaskListDto getTasklistById(Long id) {
+        TaskListModel tasklist = taskListRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Tasklist not found"));
+        return convertToDto(tasklist);
+    }
+
     public TaskListDto createOrUpdateTaskList(TaskListDto taskListDto, UserModel user) {
         TaskListModel taskList;
 

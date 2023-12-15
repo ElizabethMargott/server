@@ -89,7 +89,8 @@ public class NoteController {
 
     @GetMapping("/kanban")
     public ResponseEntity<List<NoteDto>> getNotesForKanban() {
-        List<NoteDto> notes = noteService.getNotesForKanban();
+        UserModel currentUser = userService.getCurrentUser();
+        List<NoteDto> notes = noteService.getNotesForKanban(currentUser);
         return ResponseEntity.ok(notes);
     }
 }

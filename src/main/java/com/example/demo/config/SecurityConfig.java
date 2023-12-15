@@ -60,7 +60,7 @@ CorsConfigurationSource corsConfigurationSource() {
     configuration.setAllowedOrigins(Arrays.asList("https://nexus-notes.up.railway.app", "http://localhost:5173")); 
 
     // 2. Especifica los métodos HTTP permitidos
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
     // 3. Permite credenciales, lo que significa que se permite el intercambio de cookies entre el cliente y el servidor
     configuration.setAllowCredentials(true);

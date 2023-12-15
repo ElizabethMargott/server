@@ -29,8 +29,8 @@ public class NoteService {
         this.fileStorageService = fileStorageService;
     }
 
-    public List<NoteDto> getNotesForKanban() {
-        List<NoteModel> noteModels = noteRepository.findAll();
+    public List<NoteDto> getNotesForKanban(UserModel user) {
+        List<NoteModel> noteModels = noteRepository.findByUser(user);
         return noteModels.stream()
                 .filter(note -> note.getKanbanColumn() != null)
                 .map(this::convertToDto)

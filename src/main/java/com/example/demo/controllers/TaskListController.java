@@ -40,6 +40,12 @@ public class TaskListController {
         return ResponseEntity.ok(savedTaskListDto);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskListDto> getTasklistById(@PathVariable Long id) {
+        TaskListDto taskListDto = taskListService.getTasklistById(id);
+        return ResponseEntity.ok(taskListDto);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<TaskListDto> updateTaskList(
             @PathVariable Long id, @RequestBody TaskListDto taskListDto) {

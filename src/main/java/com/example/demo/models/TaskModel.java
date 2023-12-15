@@ -21,8 +21,9 @@ public class TaskModel {
     @Column(nullable = false)
     private String content;
 
+    @Builder.Default
     @Column(nullable = false)
-    private Boolean is_completed;
+    private Boolean is_completed = false;
 
     @ManyToOne
     @JoinColumn(name = "taskList_id", nullable = false)
